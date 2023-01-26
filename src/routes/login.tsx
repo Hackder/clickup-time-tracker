@@ -20,9 +20,9 @@ const LoginForm: Component = () => {
     const user = await ClickUp.getUser(token);
     if (user.err) {
       throw {
-          err: "Invalid ClickUp Personal Token",
-          fullError: user,
-        };
+        err: "Invalid ClickUp Personal Token",
+        fullError: user,
+      };
     }
     const header = await setToken(request, token);
     return redirect("/", {

@@ -1,6 +1,14 @@
 import { cva } from "class-variance-authority";
 import { children, Component, createMemo, createSignal, JSX, Show } from "solid-js";
 
+const CarretIcon: Component = () => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+    </svg>
+  );
+};
+
 const carretButton = cva(['ml-auto'], {
   variants: {
     open: {
@@ -31,9 +39,7 @@ const SelectTreeItem: Component<{
         <label for="default-checkbox" class="text-sm font-medium">{props.label}</label>
 
         <button class={carretStyles()} onClick={() => setOpen((val) => !val)}>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
+          <CarretIcon />
         </button>
       </div>
       <Show when={open()}>
@@ -45,6 +51,34 @@ const SelectTreeItem: Component<{
   )
 }
 
+interface DropdownProps {
+  selectedId: string;
+  items: {
+    id: string;
+    label: string;
+    image?: string;
+  }[];
+};
+
+const Dropdown: Component<DropdownProps> = ({ items, selectedId }) => {
+  const [id, setId] = createSignal(selectedId);
+
+  const selectedItem = createMemo(() => items.find((item) => item.id === id()));
+
+  return (
+    <div class="px-3 py-2 flex flex-row gap-2 rounded-lg border-2 border-neutral-500 focus:border-black">
+      <Show when={selectedItem()} keyed>
+        {(item) => (
+          <>
+            <img src={item.image} />
+            <p>{item.label}</p>
+          </>
+        )}
+      </Show>
+    </div>
+  )
+};
+
 export default function Home() {
   return (
     <main class="container flex flex-row">
@@ -52,7 +86,7 @@ export default function Home() {
         <SelectTreeItem label="Item 1">
           <SelectTreeItem label="Item 1.1" />
           <SelectTreeItem label="Item 1.2">
-          <SelectTreeItem label="Item 1.2.1" />
+            <SelectTreeItem label="Item 1.2.1" />
           </SelectTreeItem>
           <SelectTreeItem label="Item 1.3" />
         </SelectTreeItem>
