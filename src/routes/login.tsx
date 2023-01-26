@@ -1,7 +1,8 @@
 import { children, Component, JSX, Show } from "solid-js";
-import { A } from "solid-start";
-import { createServerAction$, redirect } from "solid-start/server";
+import { A, ErrorMessage } from "solid-start";
+import { createServerAction$, json, redirect } from "solid-start/server";
 import Input from "~/components/Input";
+import { ClickUp } from "~/lib/clickup";
 import { setToken } from "~/lib/session";
 
 export default function Login() {
@@ -16,6 +17,13 @@ export default function Login() {
 const LoginForm: Component = () => {
   const [loggingIn, { Form }] = createServerAction$(async (form: FormData, { request }) => {
     const token = form.get("token") as string;
+    const user = await ClickUp.getUser(token);
+    if (user.err) {
+      throw {
+          err: "Invalid ClickUp Personal Token",
+          fullError: user,
+        };
+    }
     const header = await setToken(request, token);
     return redirect("/", {
       headers: {
@@ -27,7 +35,7 @@ const LoginForm: Component = () => {
   return (
     <Form class="flex flex-col gap-4 py-8 px-12 rounded-2xl w-[32em] shadow-lg bg-white">
       <h1 class="font-bold text-3xl text-center">Login</h1>
-      <Input label="ClickUp Personal Token" name="token" autocomplete="false" autofocus required />
+      <Input label="ClickUp Personal Token" name="token" error={loggingIn.error?.err} autocomplete="false" autofocus required />
       <Button type="submit" loading={loggingIn.pending}>
         Login
       </Button>
