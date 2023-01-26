@@ -1,24 +1,40 @@
 import { cva } from "class-variance-authority";
-import { children, Component, createMemo, createSignal, JSX, Show } from "solid-js";
+import {
+  children,
+  Component,
+  createMemo,
+  createSignal,
+  JSX,
+  Show,
+} from "solid-js";
 
 const CarretIcon: Component = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        clip-rule="evenodd"
+      />
     </svg>
   );
 };
 
-const carretButton = cva(['ml-auto'], {
+const carretButton = cva(["ml-auto"], {
   variants: {
     open: {
-      true: '',
-      false: 'rotate-180'
+      true: "",
+      false: "rotate-180",
     },
     hidden: {
-      true: 'invisible'
-    }
-  }
+      true: "invisible",
+    },
+  },
 });
 
 const SelectTreeItem: Component<{
@@ -30,26 +46,34 @@ const SelectTreeItem: Component<{
 
   const c = children(() => props.children);
 
-  const carretStyles = createMemo(() => carretButton({ open: open(), hidden: !c() }));
+  const carretStyles = createMemo(() =>
+    carretButton({ open: open(), hidden: !c() })
+  );
 
   return (
     <div class="flex flex-col">
       <div class="flex items-center mb-4 gap-2">
-        <input id="default-checkbox" type="checkbox" name={props.name} value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />
-        <label for="default-checkbox" class="text-sm font-medium">{props.label}</label>
+        <input
+          id="default-checkbox"
+          type="checkbox"
+          name={props.name}
+          value=""
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 focus:ring-2 focus:ring-offset-2"
+        />
+        <label for="default-checkbox" class="text-sm font-medium">
+          {props.label}
+        </label>
 
         <button class={carretStyles()} onClick={() => setOpen((val) => !val)}>
           <CarretIcon />
         </button>
       </div>
       <Show when={open()}>
-        <div class="pl-4">
-          {c()}
-        </div>
+        <div class="pl-4">{c()}</div>
       </Show>
     </div>
-  )
-}
+  );
+};
 
 interface DropdownProps {
   selectedId: string;
@@ -58,7 +82,7 @@ interface DropdownProps {
     label: string;
     image?: string;
   }[];
-};
+}
 
 const Dropdown: Component<DropdownProps> = ({ items, selectedId }) => {
   const [id, setId] = createSignal(selectedId);
@@ -76,7 +100,7 @@ const Dropdown: Component<DropdownProps> = ({ items, selectedId }) => {
         )}
       </Show>
     </div>
-  )
+  );
 };
 
 export default function Home() {
@@ -91,7 +115,9 @@ export default function Home() {
           <SelectTreeItem label="Item 1.3" />
         </SelectTreeItem>
       </div>
-      <h1 class="text-3xl font-bold text-center mt-8">Welcome to Solid-Start!</h1>
+      <h1 class="text-3xl font-bold text-center mt-8">
+        Welcome to Solid-Start!
+      </h1>
     </main>
   );
 }

@@ -1,7 +1,9 @@
 import { Team, User } from "./clickup.types";
 
 export const ClickUp = {
-  getUser: async (token: string): Promise<{
+  getUser: async (
+    token: string
+  ): Promise<{
     user: User;
   }> => {
     const res = await fetch("https://api.clickup.com/api/v2/user", {
@@ -12,7 +14,9 @@ export const ClickUp = {
     return await res.json();
   },
 
-  getTeams: async (token: string): Promise<{
+  getTeams: async (
+    token: string
+  ): Promise<{
     teams: Team[];
   }> => {
     const res = await fetch("https://api.clickup.com/api/v2/team", {
@@ -21,5 +25,5 @@ export const ClickUp = {
       },
     });
     return await res.json();
-  }
+  },
 };

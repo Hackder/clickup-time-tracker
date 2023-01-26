@@ -8,7 +8,7 @@ const storage = createCookieSessionStorage({
     path: "/",
     maxAge: 60 * 60 * 24 * 7, // 1 week
     httpOnly: true,
-  }
+  },
 });
 
 export async function getToken(request: Request): Promise<string> {
@@ -18,7 +18,10 @@ export async function getToken(request: Request): Promise<string> {
   return token;
 }
 
-export async function setToken(request: Request, token: string): Promise<string> {
+export async function setToken(
+  request: Request,
+  token: string
+): Promise<string> {
   const cookie = request.headers.get("Cookie") ?? "";
   const session = await storage.getSession(cookie);
   session.set("token", token);

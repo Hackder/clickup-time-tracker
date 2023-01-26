@@ -17,4 +17,3 @@ export function createLocalStore<T extends object>(
   createEffect(() => localStorage.setItem(name, JSON.stringify(state)));
   return [state, setState];
 }
-

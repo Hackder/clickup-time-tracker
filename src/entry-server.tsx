@@ -9,7 +9,7 @@ import { getToken } from "./lib/session";
 const protectedPaths = ["/"];
 export default createHandler(
   ({ forward }) => {
-    return async event => {
+    return async (event) => {
       if (protectedPaths.includes(new URL(event.request.url).pathname)) {
         const user = await getToken(event.request);
         if (!user) {
@@ -19,6 +19,5 @@ export default createHandler(
       return forward(event);
     };
   },
-  renderAsync(event => <StartServer event={event} />)
+  renderAsync((event) => <StartServer event={event} />)
 );
-
