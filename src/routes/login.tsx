@@ -1,6 +1,6 @@
 import { children, Component, JSX, Show } from "solid-js";
-import { A, ErrorMessage } from "solid-start";
-import { createServerAction$, json, redirect } from "solid-start/server";
+import { A } from "solid-start";
+import { createServerAction$, redirect } from "solid-start/server";
 import Input from "~/components/Input";
 import { ClickUp } from "~/lib/clickup";
 import { setToken } from "~/lib/session";
@@ -21,8 +21,8 @@ const LoginForm: Component = () => {
   const [loggingIn, { Form }] = createServerAction$(
     async (form: FormData, { request }) => {
       const token = form.get("token") as string;
-      const user = await ClickUp.getUser(token);
-      if (user.err) {
+      const response = await ClickUp.getUser(token);
+      if (ClickUp.isError(response)) {
         throw {
           err: "Invalid ClickUp Personal Token",
           fullError: user,
